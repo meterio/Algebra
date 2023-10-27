@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.4 <0.9.0;
 
-import '../interfaces/pool/IAlgebraPoolErrors.sol';
+import '../interfaces/IAlgebraPoolErrors.sol';
 
 /// @title SafeTransfer
 /// @notice Safe ERC20 transfer library that gracefully handles missing return values.

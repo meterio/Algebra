@@ -33,7 +33,7 @@ abstract contract SelfPermit is ISelfPermit {
         bytes32 r,
         bytes32 s
     ) external payable override {
-        if (_getAllowance(token) < value) selfPermit(token, value, deadline, v, r, s);
+        if (IERC20(token).allowance(msg.sender, address(this)) < value) selfPermit(token, value, deadline, v, r, s);
     }
 
     /// @inheritdoc ISelfPermit
@@ -57,10 +57,7 @@ abstract contract SelfPermit is ISelfPermit {
         bytes32 r,
         bytes32 s
     ) external payable override {
-        if (_getAllowance(token) < type(uint256).max) selfPermitAllowed(token, nonce, expiry, v, r, s);
-    }
-
-    function _getAllowance(address token) private view returns (uint256) {
-        return IERC20(token).allowance(msg.sender, address(this));
+        if (IERC20(token).allowance(msg.sender, address(this)) < type(uint256).max)
+            selfPermitAllowed(token, nonce, expiry, v, r, s);
     }
 }

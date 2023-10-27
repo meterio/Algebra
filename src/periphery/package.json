@@ -1,11 +1,11 @@
 {
-  "name": "@cryptoalgebra/integral-periphery",
-  "description": "Peripheral smart contracts of Algebra Integral protocol",
+  "name": "@cryptoalgebra/periphery",
+  "description": "Peripheral smart contracts of Algebra protocol",
   "license": "GPL-2.0-or-later",
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.2.0",
+  "version": "2.0.0",
   "keywords": [
     "algebra",
     "periphery"
@@ -18,28 +18,30 @@
     "contracts/base",
     "contracts/interfaces",
     "contracts/libraries",
-    "!contracts/hardhat-dependency-compiler",
     "artifacts/contracts/**/*.json",
     "!artifacts/contracts/**/*.dbg.json",
     "!artifacts/contracts/test/**/*",
     "!artifacts/contracts/base/**/*"
   ],
   "dependencies": {
-    "@openzeppelin/contracts": "4.9.3",
+    "@cryptoalgebra/core": "^3.0.0",
+    "@nomiclabs/hardhat-solhint": "^3.0.1",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "@nomiclabs/hardhat-web3": "^2.0.0",
+    "@openzeppelin/contracts": "4.6.0",
     "@uniswap/v2-core": "1.0.1",
-    "@cryptoalgebra/integral-core": "0.2.0"
+    "base64-sol": "1.1.0",
+    "hardhat-etherscan-abi": "^0.3.0",
+    "hardhat-watcher": "^2.5.0"
   },
   "devDependencies": {
     "is-svg": "^4.3.1"
   },
   "scripts": {
-    "compile": "npm --prefix ../core run compile  && hardhat compile",
+    "compile": "npm --prefix ../core run compile && hardhat compile",
     "test": "hardhat test --parallel",
-    "expand-abi": "hardhat expand-abi",
     "precommit": "pretty-quick --staged --pattern **/*.sol",
-    "solhint": "solhint ./contracts/**/*.sol",
-    "coverage": "npm --prefix ../core run compile && hardhat coverage",
-    "prepublish": "hardhat clean && npm run compile && npm run expand-abi"
+    "coverage": "npm --prefix ../core run compile && hardhat coverage"
   },
   "engines": {
     "npm": ">=8.0.0",

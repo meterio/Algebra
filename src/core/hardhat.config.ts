@@ -1,14 +1,18 @@
-import '@nomicfoundation/hardhat-toolbox';
+import { config as dotEnvConfig } from 'dotenv';
+import '@nomiclabs/hardhat-waffle';
+import '@nomiclabs/hardhat-ethers';
+import '@nomiclabs/hardhat-web3';
+import '@nomiclabs/hardhat-solhint';
+import '@typechain/hardhat';
+import 'hardhat-etherscan-abi';
 import 'hardhat-contract-sizer';
-import 'hardhat-output-validator';
-import 'solidity-docgen';
+
 import { SolcUserConfig } from 'hardhat/types';
 import baseConfig from '../../hardhat.base.config';
 
 const HIGHEST_OPTIMIZER_COMPILER_SETTINGS: SolcUserConfig = {
-  version: '0.8.20',
+  version: '0.8.17',
   settings: {
-    evmVersion: 'paris',
     optimizer: {
       enabled: true,
       runs: 1_000_000,
@@ -17,35 +21,35 @@ const HIGHEST_OPTIMIZER_COMPILER_SETTINGS: SolcUserConfig = {
       bytecodeHash: 'none',
     },
   },
-};
+}
 
 const DEFAULT_COMPILER_SETTINGS: SolcUserConfig = {
-  version: '0.8.20',
+  version: '0.8.17',
   settings: {
-    evmVersion: 'paris',
     optimizer: {
       enabled: true,
-      runs: 800,
+      runs: 200,
     },
     metadata: {
       bytecodeHash: 'none',
     },
   },
-};
+}
 
-const HIGH_COMPILER_SETTINGS: SolcUserConfig = {
-  version: '0.8.20',
+const LOWEST_COMPILER_SETTINGS: SolcUserConfig = {
+  version: '0.8.17',
   settings: {
-    evmVersion: 'paris',
     optimizer: {
       enabled: true,
-      runs: 2200,
+      runs: 0,
     },
     metadata: {
       bytecodeHash: 'none',
     },
   },
-};
+}
+
+
 
 if (process.env.RUN_COVERAGE == '1') {
   /**
@@ -53,13 +57,13 @@ if (process.env.RUN_COVERAGE == '1') {
    *
    * See https://github.com/sc-forks/solidity-coverage/issues/417#issuecomment-730526466
    */
-  console.info('Using coverage compiler settings');
+  console.info('Using coverage compiler settings')
   const details = {
     yul: true,
     yulDetails: {
       stackAllocation: true,
     },
-  };
+  }
 
   HIGHEST_OPTIMIZER_COMPILER_SETTINGS.settings.details = details;
   DEFAULT_COMPILER_SETTINGS.settings.details = details;
@@ -75,20 +79,14 @@ export default {
     compilers: [DEFAULT_COMPILER_SETTINGS],
     overrides: {
       'contracts/AlgebraFactory.sol': HIGHEST_OPTIMIZER_COMPILER_SETTINGS,
-      'contracts/AlgebraPoolDeployer.sol': HIGH_COMPILER_SETTINGS,
-      'contracts/AlgebraPool.sol': HIGH_COMPILER_SETTINGS,
+      'contracts/DataStorageOperator.sol': HIGHEST_OPTIMIZER_COMPILER_SETTINGS,
+      'contracts/test/simulation/SimulationTimePoolDeployer.sol': LOWEST_COMPILER_SETTINGS
     },
   },
   docgen: {
     outputDir: '../../docs/Contracts/Core',
-    pages: (x: any, buildInfo: any) => {
-      return `${buildInfo.relativePath}`.replace('.sol', '.md');
-    },
+    pages: (x: any) => x.name.toString() + '.md',
     templates: '../../docs/doc_templates/public',
-    collapseNewlines: true,
+    collapseNewlines: true
   },
-  outputValidator: {
-    runOnCompile: false,
-    exclude: ['contracts/test'],
-  },
-};
+}

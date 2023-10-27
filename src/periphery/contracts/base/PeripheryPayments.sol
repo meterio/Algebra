@@ -17,13 +17,9 @@ abstract contract PeripheryPayments is IPeripheryPayments, PeripheryImmutableSta
         require(msg.sender == WNativeToken, 'Not WNativeToken');
     }
 
-    function _balanceOfToken(address token) private view returns (uint256) {
-        return (IERC20(token).balanceOf(address(this)));
-    }
-
     /// @inheritdoc IPeripheryPayments
     function unwrapWNativeToken(uint256 amountMinimum, address recipient) external payable override {
-        uint256 balanceWNativeToken = _balanceOfToken(WNativeToken);
+        uint256 balanceWNativeToken = IWNativeToken(WNativeToken).balanceOf(address(this));
         require(balanceWNativeToken >= amountMinimum, 'Insufficient WNativeToken');
 
         if (balanceWNativeToken > 0) {
@@ -33,8 +29,12 @@ abstract contract PeripheryPayments is IPeripheryPayments, PeripheryImmutableSta
     }
 
     /// @inheritdoc IPeripheryPayments
-    function sweepToken(address token, uint256 amountMinimum, address recipient) external payable override {
-        uint256 balanceToken = _balanceOfToken(token);
+    function sweepToken(
+        address token,
+        uint256 amountMinimum,
+        address recipient
+    ) external payable override {
+        uint256 balanceToken = IERC20(token).balanceOf(address(this));
         require(balanceToken >= amountMinimum, 'Insufficient token');
 
         if (balanceToken > 0) {
@@ -51,7 +51,12 @@ abstract contract PeripheryPayments is IPeripheryPayments, PeripheryImmutableSta
     /// @param payer The entity that must pay
     /// @param recipient The entity that will receive payment
     /// @param value The amount to pay
-    function pay(address token, address payer, address recipient, uint256 value) internal {
+    function pay(
+        address token,
+        address payer,
+        address recipient,
+        uint256 value
+    ) internal {
         if (token == WNativeToken && address(this).balance >= value) {
             // pay with WNativeToken
             IWNativeToken(WNativeToken).deposit{value: value}(); // wrap only what is needed to pay

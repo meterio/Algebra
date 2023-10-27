@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "es2020",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
@@ -10,8 +10,9 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "incremental": true,
-    "typeRoots": ["./typechain", "./node_modules/@types", "../../node_modules/@types", "../../node_modules/@nomicfoundation"],
-    "types": ["hardhat-ethers", "hardhat-network-helpers", "hardhat-chai-matchers"]
+    "typeRoots": ["./typechain", "./node_modules/@types"],
+    "types": ["@nomiclabs/hardhat-ethers", "@nomicfoundation/hardhat-chai-matchers"]
   },
-  "include": ["./test/**/*.ts", "./hardhat.config.ts"]
+  "include": ["./test/**/*"],
+  "files": ["./hardhat.config.ts"]
 }

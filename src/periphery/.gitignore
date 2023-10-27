@@ -4,4 +4,3 @@ crytic-export/
 node_modules/
 typechain/
 .env
-**/hardhat-dependency-compiler

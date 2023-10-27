@@ -1,15 +1,20 @@
-import '@nomicfoundation/hardhat-toolbox';
-import 'hardhat-output-validator';
 import 'hardhat-contract-sizer';
+import 'hardhat-watcher';
 import 'hardhat-dependency-compiler';
+import 'hardhat-contract-sizer';
+import 'solidity-coverage';
 import 'solidity-docgen';
+import '@nomiclabs/hardhat-waffle';
+import '@nomiclabs/hardhat-ethers';
+import '@nomiclabs/hardhat-web3';
+import '@nomiclabs/hardhat-solhint';
+import '@typechain/hardhat';
+import 'hardhat-etherscan-abi';
 import baseConfig from '../../hardhat.base.config';
-import { task } from 'hardhat/config';
 
 const LOW_OPTIMIZER_COMPILER_SETTINGS = {
-  version: '0.8.20',
+  version: '0.8.17',
   settings: {
-    evmVersion: 'paris',
     optimizer: {
       enabled: true,
       runs: 2_000,
@@ -18,12 +23,11 @@ const LOW_OPTIMIZER_COMPILER_SETTINGS = {
       bytecodeHash: 'none',
     },
   },
-};
+}
 
 const LOWEST_OPTIMIZER_COMPILER_SETTINGS = {
-  version: '0.8.20',
+  version: '0.8.17',
   settings: {
-    evmVersion: 'paris',
     viaIR: true,
     optimizer: {
       enabled: true,
@@ -33,12 +37,11 @@ const LOWEST_OPTIMIZER_COMPILER_SETTINGS = {
       bytecodeHash: 'none',
     },
   },
-};
+}
 
 const DEFAULT_COMPILER_SETTINGS = {
-  version: '0.8.20',
+  version: '0.8.17',
   settings: {
-    evmVersion: 'paris',
     optimizer: {
       enabled: true,
       runs: 1_000_000,
@@ -47,22 +50,7 @@ const DEFAULT_COMPILER_SETTINGS = {
       bytecodeHash: 'none',
     },
   },
-};
-
-task('expand-abi', 'adds pool custom errors to abi', async (taskArgs, hre) => {
-  const poolArtifact = await hre.artifacts.readArtifact('IAlgebraPool');
-
-  const routerArtifact = await hre.artifacts.readArtifact('SwapRouter');
-  const positionManagerArtifact = await hre.artifacts.readArtifact('NonfungiblePositionManager');
-
-  const poolErrors = poolArtifact.abi.filter((x) => x.type == 'error');
-
-  routerArtifact.abi = routerArtifact.abi.concat(poolErrors);
-  positionManagerArtifact.abi = positionManagerArtifact.abi.concat(poolErrors);
-
-  await hre.artifacts.saveArtifactAndDebugFile(routerArtifact);
-  await hre.artifacts.saveArtifactAndDebugFile(positionManagerArtifact);
-});
+}
 
 export default {
   networks: baseConfig.networks,
@@ -71,6 +59,7 @@ export default {
     compilers: [DEFAULT_COMPILER_SETTINGS],
     overrides: {
       'contracts/NonfungiblePositionManager.sol': LOW_OPTIMIZER_COMPILER_SETTINGS,
+      'contracts/LimitOrderManager.sol': LOW_OPTIMIZER_COMPILER_SETTINGS,
       'contracts/test/MockTimeNonfungiblePositionManager.sol': LOW_OPTIMIZER_COMPILER_SETTINGS,
       'contracts/test/NFTDescriptorTest.sol': LOWEST_OPTIMIZER_COMPILER_SETTINGS,
       'contracts/NonfungibleTokenPositionDescriptor.sol': LOWEST_OPTIMIZER_COMPILER_SETTINGS,
@@ -79,22 +68,17 @@ export default {
     },
   },
   typechain: {
-    outDir: 'typechain',
+    outDir: 'typechain'
   },
   docgen: {
     outputDir: '../../docs/Contracts/Periphery',
-    pages: (x: any, buildInfo: any) => {
-      return `${buildInfo.relativePath}`.replace('.sol', '.md');
-    },
+    pages: (x: any) => x.name.toString() + '.md',
     templates: '../../docs/doc_templates/public',
-    collapseNewlines: true,
+    collapseNewlines: true
   },
   dependencyCompiler: {
-    paths: ['@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol'],
-    keep: true,
-  },
-  outputValidator: {
-    runOnCompile: false,
-    exclude: ['contracts/test'],
-  },
-};
+    paths: [
+      '@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol',
+    ],
+  }
+}

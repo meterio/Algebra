@@ -3,7 +3,6 @@ node_modules
 cache
 artifacts
 typechain
-corpus
 .idea
 bytecode
 hashCalc.js
