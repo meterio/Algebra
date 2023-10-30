@@ -35,11 +35,5 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts": "4.8.1"
-  },
-  "dependencies": {
-    "@nomiclabs/hardhat-solhint": "^3.0.1",
-    "@nomiclabs/hardhat-waffle": "^2.0.6",
-    "@nomiclabs/hardhat-web3": "^2.0.0",
-    "hardhat-etherscan-abi": "^0.3.0"
   }
 }

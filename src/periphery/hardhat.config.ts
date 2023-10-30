@@ -1,15 +1,10 @@
+import '@nomicfoundation/hardhat-toolbox';
 import 'hardhat-contract-sizer';
 import 'hardhat-watcher';
 import 'hardhat-dependency-compiler';
 import 'hardhat-contract-sizer';
 import 'solidity-coverage';
 import 'solidity-docgen';
-import '@nomiclabs/hardhat-waffle';
-import '@nomiclabs/hardhat-ethers';
-import '@nomiclabs/hardhat-web3';
-import '@nomiclabs/hardhat-solhint';
-import '@typechain/hardhat';
-import 'hardhat-etherscan-abi';
 import baseConfig from '../../hardhat.base.config';
 
 const LOW_OPTIMIZER_COMPILER_SETTINGS = {

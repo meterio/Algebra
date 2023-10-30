@@ -1,26 +1,22 @@
-import hre from 'hardhat'
-import fs from 'fs'
-import path from 'path'
-// import utils from 'ethers'
-import { ethers } from 'hardhat'
-import { getContractAddress } from '@ethersproject/address'
+const hre = require('hardhat')
+const fs = require('fs')
+const path = require('path')
 
 async function main() {
-  const [deployer] = await ethers.getSigners()
-  console.log("deployer:",deployer.address)
+  const [deployer] = await hre.ethers.getSigners()
   // precompute
-  const poolDeployerAddress = getContractAddress({
+  const poolDeployerAddress = hre.ethers.utils.getContractAddress({
     from: deployer.address,
     nonce: (await deployer.getTransactionCount()) + 1,
   })
 
-  const AlgebraFactory = await ethers.getContractFactory('AlgebraFactory')
+  const AlgebraFactory = await hre.ethers.getContractFactory('AlgebraFactory')
   const factory = await AlgebraFactory.deploy(poolDeployerAddress)
   await factory.deployed()
 
   const vaultAddress = await factory.communityVault()
 
-  const PoolDeployerFactory = await ethers.getContractFactory('AlgebraPoolDeployer')
+  const PoolDeployerFactory = await hre.ethers.getContractFactory('AlgebraPoolDeployer')
   const poolDeployer = await PoolDeployerFactory.deploy(factory.address, vaultAddress)
   await poolDeployer.deployed()
 
@@ -31,7 +27,7 @@ async function main() {
   let deploysData = JSON.parse(fs.readFileSync(deployDataPath, 'utf8'))
   deploysData.poolDeployer = poolDeployer.address
   deploysData.factory = factory.address
-  fs.writeFileSync(deployDataPath, JSON.stringify(deploysData), 'utf-8')
+  fs.writeFileSync(deployDataPath, JSON.stringify(deploysData, null, 2), 'utf-8')
 }
 
 // We recommend this pattern to be able to use async/await everywhere

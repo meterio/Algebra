@@ -1,12 +1,6 @@
-import { config as dotEnvConfig } from 'dotenv';
-import '@nomiclabs/hardhat-waffle';
-import '@nomiclabs/hardhat-ethers';
-import '@nomiclabs/hardhat-web3';
-import '@nomiclabs/hardhat-solhint';
-import '@typechain/hardhat';
-import 'hardhat-etherscan-abi';
+import '@nomicfoundation/hardhat-toolbox';
 import 'hardhat-contract-sizer';
-
+import 'solidity-docgen';
 import { SolcUserConfig } from 'hardhat/types';
 import baseConfig from '../../hardhat.base.config';
 
