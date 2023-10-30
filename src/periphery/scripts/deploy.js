@@ -73,51 +73,48 @@ async function main() {
     deploysData.factory,
     WNativeTokenAddress,
     Proxy.address,
-    deploysData.poolDeployer,
-    { gasLimit: 5376784 }
+    deploysData.poolDeployer
   )
 
   await NonfungiblePositionManager.deployed()
-  // let tx = NonfungiblePositionManager.deployTransaction
-  // console.log(await tx.wait())
-  // deploysData.nonfungiblePositionManager = NonfungiblePositionManager.address
-  // console.log('NonfungiblePositionManager deployed to:', NonfungiblePositionManager.address)
+  deploysData.nonfungiblePositionManager = NonfungiblePositionManager.address
+  console.log('NonfungiblePositionManager deployed to:', NonfungiblePositionManager.address)
 
-  // const LimitOrderManagerFactory = await hre.ethers.getContractFactory('LimitOrderManager')
-  // const LimitOrderManager = await LimitOrderManagerFactory.deploy(
-  //   deploysData.factory,
-  //   WNativeTokenAddress,
-  //   deploysData.poolDeployer
-  // )
+  const LimitOrderManagerFactory = await hre.ethers.getContractFactory('LimitOrderManager')
+  const LimitOrderManager = await LimitOrderManagerFactory.deploy(
+    deploysData.factory,
+    WNativeTokenAddress,
+    deploysData.poolDeployer
+  )
 
-  // await LimitOrderManager.deployed()
-  // deploysData.LimitOrderManager = LimitOrderManager.address
-  // console.log('LimitOrderManager deployed to:', LimitOrderManager.address)
+  await LimitOrderManager.deployed()
+  deploysData.LimitOrderManager = LimitOrderManager.address
+  console.log('LimitOrderManager deployed to:', LimitOrderManager.address)
 
-  // // // arg1 factory address
-  // // // arg2 wnative address
-  // // // arg3 nonfungiblePositionManager address
-  // const V3MigratorFactory = await hre.ethers.getContractFactory('V3Migrator')
-  // const V3Migrator = await V3MigratorFactory.deploy(
-  //   deploysData.factory,
-  //   WNativeTokenAddress,
-  //   NonfungiblePositionManager.address,
-  //   deploysData.poolDeployer
-  // )
+  // // arg1 factory address
+  // // arg2 wnative address
+  // // arg3 nonfungiblePositionManager address
+  const V3MigratorFactory = await hre.ethers.getContractFactory('V3Migrator')
+  const V3Migrator = await V3MigratorFactory.deploy(
+    deploysData.factory,
+    WNativeTokenAddress,
+    NonfungiblePositionManager.address,
+    deploysData.poolDeployer
+  )
 
-  // await V3Migrator.deployed()
-  // deploysData.V3Migrator = V3Migrator.address
+  await V3Migrator.deployed()
+  deploysData.V3Migrator = V3Migrator.address
 
-  // const AlgebraInterfaceMulticallFactory = await hre.ethers.getContractFactory('AlgebraInterfaceMulticall')
-  // const AlgebraInterfaceMulticall = await AlgebraInterfaceMulticallFactory.deploy()
+  const AlgebraInterfaceMulticallFactory = await hre.ethers.getContractFactory('AlgebraInterfaceMulticall')
+  const AlgebraInterfaceMulticall = await AlgebraInterfaceMulticallFactory.deploy()
 
-  // await AlgebraInterfaceMulticall.deployed()
-  // deploysData.AlgebraInterfaceMulticall = AlgebraInterfaceMulticall.address
+  await AlgebraInterfaceMulticall.deployed()
+  deploysData.AlgebraInterfaceMulticall = AlgebraInterfaceMulticall.address
 
-  // console.log('AlgebraInterfaceMulticall deployed to:', AlgebraInterfaceMulticall.address)
-  // console.log('V3Migrator deployed to:', V3Migrator.address)
+  console.log('AlgebraInterfaceMulticall deployed to:', AlgebraInterfaceMulticall.address)
+  console.log('V3Migrator deployed to:', V3Migrator.address)
 
-  // fs.writeFileSync(deployDataPath, JSON.stringify(deploysData, null, 2), 'utf-8')
+  fs.writeFileSync(deployDataPath, JSON.stringify(deploysData, null, 2), 'utf-8')
 }
 
 // We recommend this pattern to be able to use async/await everywhere
